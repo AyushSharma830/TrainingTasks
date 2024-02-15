@@ -1,6 +1,6 @@
 import java.util.Scanner
 
-fun solve(nums: MutableList<Int>): Int {
+fun singleNumber(nums: MutableList<Int>): Int {
     var ans : Int =0
     for(num in nums){
         ans=ans xor num
@@ -20,5 +20,5 @@ fun main(){
         element=reader.nextInt()
         arr.add(element)
     }
-    println(solve(arr))
+    println(singleNumber(arr))
 }
