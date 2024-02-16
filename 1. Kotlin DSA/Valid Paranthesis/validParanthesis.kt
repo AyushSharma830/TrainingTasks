@@ -3,6 +3,7 @@ import java.util.Stack
 
 fun validParanthesis(input : String) : Boolean{
     val st= Stack<Int>()
+    
     for(index in 0..input.length-1){
         if(input[index]=='(' || input[index]=='[' || input[index]=='{' )    st.push(index)
         else if(input[index]==')'){
