@@ -5,19 +5,24 @@ package org.example
 
 import org.json.JSONObject
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import java.lang.reflect.Field
 import java.util.Objects
 
 data class Vehicle(var regNo : String?, var chasisNo : String?, var noOfWheels : Int?){
     constructor(): this(regNo = null, chasisNo = null, noOfWheels = null)
     override fun toString(): String {
-        val vehicleJson = JSONObject()       //we generally use this
-        vehicleJson.put("regNo",regNo)
-        vehicleJson.put("chasisNo",chasisNo)
-        vehicleJson.put("noOfWheels",noOfWheels)
-        return vehicleJson.toString()
-//        val vehicleJson = JSONObject(this)
+//        val vehicleJson = JSONObject()       //1st way
+//        vehicleJson.put("regNo",regNo)
+//        vehicleJson.put("chasisNo",chasisNo)
+//        vehicleJson.put("noOfWheels",noOfWheels)
 //        return vehicleJson.toString()
+
+//        val vehicleJson = JSONObject(this)    //2nd way
+//        return vehicleJson.toString()
+
+        val vehicleJSON = GsonBuilder().serializeNulls().create().toJson(this)  //3rd way
+        return vehicleJSON.toString()
     }
 }
 
