@@ -9,7 +9,7 @@ fun main() {
 //    val config = MyApplication()
     val server: HttpServer = GrizzlyHttpServerFactory.createHttpServer(baseUri)
 
-    println("Server started. Press Ctrl+C to stop.")
+    println("Server started. Press Enter to stop.")
     readLine() // Keep the program running until user input (Ctrl+C)
     server.shutdownNow()
 }
