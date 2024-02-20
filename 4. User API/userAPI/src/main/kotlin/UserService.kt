@@ -7,32 +7,28 @@ import javax.ws.rs.core.Response
 class UserService {
     private val userRepository = UserRepository()
 
-    fun getAllUsers() : List<String>? {
-        val users : List<User>? = userRepository.getAllUsers()
-        if(users != null){
-//            val addedUsers: List<String>? = GsonBuilder().serializeNulls().create().toJson(users,List<User>::class.java)
-            val addedUsers : List<String> = users.map { Gson().toJson(it).toString() }
-            return addedUsers
-        }
-        return null
+    fun getAllUsers() : List<User> {
+        val users  = userRepository.getAllUsers()
+        return users
     }
 
-    fun getUserById(id : Int?) : String?{
-        val user : User? = userRepository.getUserById(id)
-        if(user != null){
-            val addedUserJson = GsonBuilder().serializeNulls().create().toJson(user)
-            return addedUserJson.toString()
-        }
-        return null
+    fun getUserById(id : Int) : User?{
+        return userRepository.getUserById(id)
     }
 
-    fun addUser(data : String?) : Response{
-        if(data != null){
-            val userJson : JSONObject? = JSONObject(data)
-            val user : User? = Gson().fromJson(userJson.toString(),User::class.java)
-            userRepository.addUser(user)
-            return Response.ok("New User Added").type(MediaType.APPLICATION_JSON).build()
-        }
-        return Response.ok("NULL Data").type(MediaType.APPLICATION_JSON).build()
+    fun addUser(userData : String) : User? {
+        val user  = Gson().fromJson(userData,User::class.java)
+        val addedUser  = userRepository.addUser(user)
+        return addedUser
+    }
+
+    fun updateUser(existingUser: User, userData : String) : User? {
+        val newUser = Gson().fromJson(userData,User::class.java)
+        val updatedUser = userRepository.updateUser(existingUser,newUser)
+        return updatedUser
+    }
+
+    fun deleteUser(user : User) : User {
+        return userRepository.deleteUser(user)
     }
 }
