@@ -1,0 +1,71 @@
+1. use practiceCommands
+2. db.practice.insertOne({"name" : "Ayush", "age" : 22, "subjects" : ["English", "Maths"], "address" : { "city" : "Udaipur", "state" : "Rajasthan"}})
+3. db.practice.insertMany([
+  {
+    name: "Sam",
+    age: 24,
+    subjects: ["English", "Science"],
+    address: {
+      city: "Gurugram",
+      state: "Haryana"
+    }
+  },
+  {
+    name: "Sara",
+    age: 20,
+    subjects: ["History", "Geography"],
+    address: {
+      city: "Jaipur",
+      state: "Rajasthan"
+    }
+  },
+  {
+    name: "John",
+    age: 23,
+    subjects: ["Computer Science", "Physics"],
+    address: {
+      city: "Bangalore",
+      state: "Karnataka"
+    }
+  },
+  {
+    name: "Emma",
+    age: 21,
+    subjects: ["Biology", "Chemistry"],
+    address: {
+      city: "Mumbai",
+      state: "Maharashtra"
+    }
+  }
+])
+4. db.practice.find()
+5. db.practice.find({"age" : 22})
+6. db.practice.find({$and : [{ "age" : 21 }, { "name" : "Emma" }]})					//Explicit And, similary $or
+7. db.practice.find({"age" : 22, "name" : "Emma"})							//Implicit And
+8. db.practice.find({ $and : [ {"age" : {$gt : 22}}, { "age" : {$lt : 25} } ] })			//similary $gte, $lte, $eq, $ne
+9. db.practice.find().sort({ age : 1 })									//similarly -1 for desc
+10. db.practice.find().limit(3)
+11. db.practice.find({ "age" : { $in : [21,22] } })							//similarly $nin
+
+Querying Arrays:
+12. db.practice.find({ "subjects" : "English" })							//one of the subject is English
+13. db.practice.find({ "subjects" : ["English", "Maths"] })						//where subjects = ["English", "Maths"]
+14. db.practice.find({ "subjects" : { $all : [ "English", "Maths" ]} })					//where subjects contain "English" & "Maths"
+15. db.practice.find({ "subjects" : {$nin : ["English"]} })						//where subjects not have "English"
+
+Querying Nested Documents:
+16. db.practice.find({ "address.city" : "Udaipur" })							//where city in address key is "Udaipur"
+17. db.practice.find({ $or : [{"address.city": "Udaipur"}, {"address.city": "Gurugram"}] })
+18. db.practice.find({ "address.city": { $ne: "Udaipur" } }, { name : 1, age : 1})
+
+19. db.practice.updateOne({ "name" : "Ayush" }, { $set : { "age" : 25} })
+20. db.practice.updateOne({"name":"Ayush"},{$push : {"subjects" : "History"}})
+21. db.practice.updateMany({}, {$inc : {"age" : 1}})
+22. db.practice.updateOne({ "name": "Emma" }, { $pull : {"subjects" : "Biology"} })
+23. db.practice.deleteOne({ "name": "Ayush" })
+24. db.practice.createIndex({ "name": 1 })
+25. db.practice.dropIndex("name_1")
+26. db.practice.find({ "name": "Ayush" }).explain("executionStats")
+27. db.practice.distinct("address.state")
+28. db.practice.countDocuments({ "age": { $gt: 22 } })
+
