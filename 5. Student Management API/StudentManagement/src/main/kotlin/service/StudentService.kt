@@ -4,12 +4,14 @@ import models.Student
 import models.LiteSchool
 import repository.StudentRepository
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import constants.Constants
 import models.School
 import org.json.JSONObject
 import java.util.UUID
 
 
-class StudentService {
+class StudentService() {
     private val studentRepository = StudentRepository()
     private val schoolService = SchoolService()
     private val validateStudents = validationServices.StudentValidation()
@@ -46,7 +48,7 @@ class StudentService {
         }
     }
 
-    fun addStudent(studentData : String, school : School) : Student? {
+    fun addStudent(studentData : String, school : School) : Student {
         return try{
             val student = Gson().fromJson(studentData, Student::class.java)
             val liteSchoolJson = JSONObject()
@@ -63,11 +65,11 @@ class StudentService {
         }
     }
 
-    fun partialUpdateStudent(existingStudent: Student, studentData: String) : Student?{
+    fun partialUpdateStudent(existingStudentId: String, studentData: String) : Student?{
         return try{
             val studentJson = JSONObject(studentData)
             var key = studentJson["key"].toString()
-            var value = studentJson["value"]
+            var value = if(studentJson.isNull("value")) null else studentJson["value"]
             if(key == "schoolId"){
                 val newSchoolInfo = schoolService.getSchoolById(value.toString())
                 if (newSchoolInfo != null) {
@@ -80,11 +82,32 @@ class StudentService {
                     throw (IllegalArgumentException("Bad Request, No Such School Found."))
                 }
             }
-            val newStudentJson = JSONObject(existingStudent.toString())
-            newStudentJson.put(key,value)
-            val newStudent = Gson().fromJson(newStudentJson.toString(), Student::class.java)
-            validateStudents.validateFields(newStudent, existingStudent.id)
-            studentRepository.partialUpdateStudent(existingStudent, newStudent)
+            when(key){
+                "name" -> {
+                    validateStudents.validateName(value?.toString())
+                }
+                "email" -> {
+                    validateStudents.validateEmail(value?.toString())
+                    validateStudents.validateEmailUniqueness(value.toString(), existingStudentId)
+                }
+                "rollNo" -> {
+                    validateStudents.validateRollNo(value?.toString())
+                    validateStudents.validateRollNoUniqueness(value.toString(), existingStudentId, null)
+                }
+                "schoolInfo" -> {
+                    val student = studentRepository.getStudentById(existingStudentId)
+                    if(student != null){
+                        student.schoolInfo = GsonBuilder().serializeNulls().create().fromJson(value.toString(), LiteSchool::class.java)
+                        validateStudents.validateFields(student, existingStudentId)
+                    }else{
+                        throw(IllegalArgumentException(Constants.NO_STUDENT_ERROR))
+                    }
+                }
+                else -> {
+                    throw(IllegalArgumentException("No Valid Key."))
+                }
+            }
+            studentRepository.partialUpdateStudent(existingStudentId, key, value)
         }catch(e : IllegalArgumentException){
             throw(IllegalArgumentException(e.message))
         }

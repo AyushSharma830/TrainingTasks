@@ -1,6 +1,6 @@
 package models
 
-import org.json.JSONObject
+import com.google.gson.GsonBuilder
 
 data class School(
     var id : String?,
@@ -11,11 +11,6 @@ data class School(
     constructor() : this(id = null, name = null, location = null, createdAt = null)
 
     override fun toString(): String {
-        val schoolJson = JSONObject()
-        schoolJson.put("id", this.id)
-        schoolJson.put("name", this.name)
-        schoolJson.put("location", this.location)
-        schoolJson.put("createdAt", this.createdAt)
-        return schoolJson.toString()
+        return GsonBuilder().serializeNulls().create().toJson(this)
     }
 }

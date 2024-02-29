@@ -1,6 +1,6 @@
 package resource
 
-import constraints.Constraints
+import constants.Constants
 import service.StudentService
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
@@ -8,7 +8,7 @@ import javax.ws.rs.core.MediaType
 import utility.ResponseUtil
 
 @Path("/students")
-class StudentResource {
+class StudentResource() {
     private val studentService = StudentService()
 
     @GET
@@ -35,7 +35,7 @@ class StudentResource {
             if(student != null){
                 ResponseUtil.success(data = student)
             }else{
-                ResponseUtil.error(status = 400, error = Constraints.NO_STUDENT_ERROR)
+                ResponseUtil.error(status = 400, error = Constants.NO_STUDENT_ERROR)
             }
         }catch(e : IllegalArgumentException){
             ResponseUtil.error(status = 400, error = e.message)
@@ -48,20 +48,14 @@ class StudentResource {
     @Produces(MediaType.APPLICATION_JSON)
     fun partialUpdateStudent(@PathParam("id") id : String, studentData : String?) : String{
         return try{
-            val existingStudent = studentService.getStudentById(id)
-            if(existingStudent != null){
-                if(!studentData.isNullOrBlank()){
-                    val updatedStudent = studentService.partialUpdateStudent(existingStudent, studentData)
-                    if(updatedStudent != null){
-                        ResponseUtil.success(data = updatedStudent)
-                    }else{
-                        ResponseUtil.error(status = 500, error = Constraints.INT_SERVER_ERROR)
-                    }
+            if(!studentData.isNullOrBlank()){
+                val updatedStudent = studentService.partialUpdateStudent(id, studentData)
+                if(updatedStudent != null){
+                    ResponseUtil.success(data = updatedStudent)
                 }else{
-                    ResponseUtil.error(status = 400, error = Constraints.BAD_REQ_ERROR)
-                }
+                    ResponseUtil.error(status = 400, error = Constants.NO_SCHOOL_ERROR)                }
             }else{
-                ResponseUtil.error(status = 400, error = Constraints.NO_STUDENT_ERROR)
+                ResponseUtil.error(status = 400, error = Constants.BAD_REQ_ERROR)
             }
         }catch(e : IllegalArgumentException){
             ResponseUtil.error(status = 400, error = e.message)
@@ -77,7 +71,7 @@ class StudentResource {
             if(deletedStudent != null){
                 ResponseUtil.success(data = deletedStudent)
             }else{
-                ResponseUtil.error(status = 400, error = Constraints.NO_STUDENT_ERROR)
+                ResponseUtil.error(status = 400, error = Constants.NO_STUDENT_ERROR)
             }
         }catch(e : IllegalArgumentException){
             ResponseUtil.error(status = 400, error = e.message)

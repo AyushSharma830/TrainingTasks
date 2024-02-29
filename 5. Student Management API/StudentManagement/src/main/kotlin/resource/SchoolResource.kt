@@ -3,7 +3,8 @@ package resource
 import utility.ResponseUtil
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
-import constraints.Constraints
+import constants.Constants
+
 
 @Path("/schools")
 class SchoolResource {
@@ -34,7 +35,7 @@ class SchoolResource {
             if(school != null){
                 ResponseUtil.success(data = school)
             }else{
-                ResponseUtil.error(status = 400, error = Constraints.NO_SCHOOL_ERROR)
+                ResponseUtil.error(status = 400, error = Constants.NO_SCHOOL_ERROR)
             }
         }catch(e : IllegalArgumentException){
             ResponseUtil.error(status = 400, error = e.message)
@@ -45,17 +46,13 @@ class SchoolResource {
     @Path("/school")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    fun addSchool(schoolData : String?) : String{
+     fun addSchool(schoolData: String?) : String{
         return try{
             if(schoolData.isNullOrBlank()){
-                ResponseUtil.error(status = 400, error = Constraints.BAD_REQ_ERROR)
+                ResponseUtil.error(status = 400, error = Constants.BAD_REQ_ERROR)
             }else{
                 val addedSchool = schoolService.addSchool(schoolData)
-                if(addedSchool != null){
-                    ResponseUtil.success(data = addedSchool)
-                }else{
-                    ResponseUtil.error(status = 500, error = Constraints.INT_SERVER_ERROR)
-                }
+                ResponseUtil.success(data = addedSchool)
             }
         }catch(e : IllegalArgumentException){
             ResponseUtil.error(status = 400, error = e.message)
@@ -68,21 +65,16 @@ class SchoolResource {
     @Consumes(MediaType.APPLICATION_JSON)
     fun partialUpdateSchool(@PathParam("id") id : String, schoolData : String?) : String{
         return try{
-            val existingSchool = schoolService.getSchoolById(id)
-            if(existingSchool != null){
                 if(!schoolData.isNullOrBlank()){
-                    val updatedSchool = schoolService.partialUpdateSchool(existingSchool, schoolData)
+                    val updatedSchool = schoolService.partialUpdateSchool(id, schoolData)
                     if(updatedSchool != null){
                         ResponseUtil.success(data = updatedSchool)
                     }else{
-                        ResponseUtil.error(status = 500, error = Constraints.INT_SERVER_ERROR)
+                        ResponseUtil.error(status = 400, error = Constants.NO_SCHOOL_ERROR)
                     }
                 }else{
-                    ResponseUtil.error(status = 400, error = Constraints.BAD_REQ_ERROR)
+                    ResponseUtil.error(status = 400, error = Constants.BAD_REQ_ERROR)
                 }
-            }else{
-                ResponseUtil.error(status = 400, error = Constraints.NO_SCHOOL_ERROR)
-            }
         }catch(e : IllegalArgumentException){
             ResponseUtil.error(status = 400, error = e.message)
         }
@@ -98,7 +90,7 @@ class SchoolResource {
                 studentService.deleteStudentsBySchoolId(id)
                 ResponseUtil.success(data = deletedSchool)
             }else{
-                ResponseUtil.error(status = 400, error = Constraints.NO_SCHOOL_ERROR)
+                ResponseUtil.error(status = 400, error = Constants.NO_SCHOOL_ERROR)
             }
         }catch(e : IllegalArgumentException){
             ResponseUtil.error(status = 400, error = e.message)
@@ -112,18 +104,14 @@ class SchoolResource {
     fun addStudent(@PathParam("id") id : String, studentData : String?) : String{
         return try{
             if(studentData.isNullOrBlank()){
-                ResponseUtil.error(status = 400, error = Constraints.BAD_REQ_ERROR)
+                ResponseUtil.error(status = 400, error = Constants.BAD_REQ_ERROR)
             }else{
                 val school = schoolService.getSchoolById(id)
                 if(school != null){
                     val student = studentService.addStudent(studentData, school)
-                    if(student != null){
-                        ResponseUtil.success(data = student)
-                    }else{
-                        ResponseUtil.error(status = 500, error = Constraints.INT_SERVER_ERROR)
-                    }
+                    ResponseUtil.success(data = student)
                 }else{
-                    ResponseUtil.error(status = 400, error = Constraints.NO_SCHOOL_ERROR)
+                    ResponseUtil.error(status = 400, error = Constants.NO_SCHOOL_ERROR)
                 }
             }
         }catch(e : IllegalArgumentException){
@@ -140,13 +128,8 @@ class SchoolResource {
         @QueryParam("offset") offset: Int?
         ) : String{
         return try{
-            val school = schoolService.getSchoolById(id)
-            if(school != null){
-                val students = studentService.getStudentsBySchoolId(id, limit, offset)
-                ResponseUtil.success(data = students)
-            }else{
-                ResponseUtil.error(status = 400, error = Constraints.NO_SCHOOL_ERROR)
-            }
+            val students = studentService.getStudentsBySchoolId(id, limit, offset)
+            ResponseUtil.success(data = students)
         }catch(e : IllegalArgumentException){
             ResponseUtil.error(status = 400, error = e.message)
         }

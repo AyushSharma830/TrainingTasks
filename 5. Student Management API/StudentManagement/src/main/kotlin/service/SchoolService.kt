@@ -27,7 +27,7 @@ class SchoolService {
         }
     }
 
-    fun addSchool(schoolData : String) : School?{
+      fun addSchool(schoolData : String) : School{
         return try{
             val school = Gson().fromJson(schoolData, School::class.java)
             school.id = UUID.randomUUID().toString()
@@ -39,16 +39,23 @@ class SchoolService {
         }
     }
 
-    fun partialUpdateSchool(existingSchool: School, schoolData: String) : School?{
+    fun partialUpdateSchool(existingSchoolId: String, schoolData: String) : School?{
         return try{
             val schoolJson = JSONObject(schoolData)
             val key = schoolJson["key"].toString()
-            val value = schoolJson["value"]
-            val newSchoolJson = JSONObject(existingSchool.toString())
-            newSchoolJson.put(key, value)
-            val newSchool = Gson().fromJson(newSchoolJson.toString(),School::class.java)
-            schoolValidation.validateFields(newSchool)
-            schoolRepository.partialUpdateSchool(existingSchool, newSchool)
+            val value = if(schoolJson.isNull("value")) null else schoolJson["value"]
+            when (key) {
+                "name" -> {
+                    schoolValidation.validateName(value?.toString())
+                }
+                "location" -> {
+                    schoolValidation.validateLocation(value?.toString())
+                }
+                else -> {
+                    throw(IllegalArgumentException("No Valid Key."))
+                }
+            }
+            schoolRepository.partialUpdateSchool(existingSchoolId, key, value!!)
         }catch(e : IllegalArgumentException){
             throw(IllegalArgumentException(e.message))
         }
