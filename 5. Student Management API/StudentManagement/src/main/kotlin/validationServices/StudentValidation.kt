@@ -2,9 +2,9 @@ package validationServices
 
 import models.Student
 import repository.StudentRepository
+import javax.inject.Inject
 
-class StudentValidation() {
-    private val studentRepository = StudentRepository()
+class StudentValidation @Inject constructor(private val studentRepository: StudentRepository) {
 
     fun validateFields(student : Student, existingStudentId : String?){
         validateName(student.name)

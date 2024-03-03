@@ -1,8 +1,9 @@
 package validationServices
 
 import models.School
+import javax.inject.Inject
 
-class SchoolValidation {
+class SchoolValidation @Inject constructor() {
 
     fun validateFields(school : School){
         validateName(school.name)

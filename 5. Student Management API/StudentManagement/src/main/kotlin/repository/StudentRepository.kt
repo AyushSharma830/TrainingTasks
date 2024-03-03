@@ -2,6 +2,7 @@ package repository
 
 import com.google.gson.GsonBuilder
 import com.mongodb.client.MongoCollection
+import com.mongodb.client.MongoDatabase
 import com.mongodb.client.model.Filters
 import com.mongodb.client.model.FindOneAndUpdateOptions
 import com.mongodb.client.model.Projections
@@ -14,13 +15,12 @@ import org.bson.Document
 import org.litote.kmongo.findOne
 import org.litote.kmongo.findOneById
 import setupConnection
+import javax.inject.Inject
 import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 
-class StudentRepository() {
-    companion object{
-        private val db = setupConnection()
-        var students: MongoCollection<Document> = db.getCollection( "students")
-    }
+class StudentRepository @Inject constructor(private val db : MongoDatabase) {
+
+    var students: MongoCollection<Document> = db.getCollection( "students")
 
     fun validateEmailUniqueness(email : String, existingStudentId : String?) : Boolean{
         return students.findOne(Filters.and(

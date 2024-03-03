@@ -6,10 +6,11 @@ import org.json.JSONObject
 import repository.SchoolRepository
 import validationServices.SchoolValidation
 import java.util.UUID
+import javax.inject.Inject
 
-class SchoolService {
-    private val schoolRepository = SchoolRepository()
-    private val schoolValidation = SchoolValidation()
+class SchoolService @Inject constructor(
+    private val schoolRepository : SchoolRepository,
+    private val schoolValidation : SchoolValidation) {
 
     fun getAllSchools(limit : Int?, offset : Int?) : List<School>{
         return try{

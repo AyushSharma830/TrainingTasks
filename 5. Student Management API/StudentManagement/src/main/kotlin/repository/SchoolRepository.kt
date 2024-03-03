@@ -2,6 +2,7 @@ package repository
 
 import com.google.gson.GsonBuilder
 import com.mongodb.client.MongoCollection
+import com.mongodb.client.MongoDatabase
 import com.mongodb.client.model.Filters
 import com.mongodb.client.model.FindOneAndUpdateOptions
 import com.mongodb.client.model.ReturnDocument
@@ -11,12 +12,11 @@ import org.bson.Document
 import org.litote.kmongo.findOneById
 
 import setupConnection
+import javax.inject.Inject
 
-class SchoolRepository {
-    companion object{
-        private val db = setupConnection()
-        var schools: MongoCollection<Document> = db.getCollection( "schools")
-    }
+class SchoolRepository @Inject constructor(private val db : MongoDatabase) {
+
+    var schools : MongoCollection<Document> = db.getCollection( "schools")
 
     fun getAllSchools(limit : Int?, offset : Int?) : List<School>{
         return try{

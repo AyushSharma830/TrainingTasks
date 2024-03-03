@@ -4,12 +4,15 @@ import utility.ResponseUtil
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
 import constants.Constants
+import service.SchoolService
+import service.StudentService
+import javax.inject.Inject
 
 
 @Path("/schools")
-class SchoolResource {
-    private val schoolService = service.SchoolService()
-    private val studentService = service.StudentService()
+class SchoolResource @Inject constructor(
+    private val schoolService: SchoolService,
+    private val studentService: StudentService) {
 
     @GET
     @Path("")

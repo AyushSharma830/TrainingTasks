@@ -6,10 +6,10 @@ import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
 
 import utility.ResponseUtil
+import javax.inject.Inject
 
 @Path("/students")
-class StudentResource() {
-    private val studentService = StudentService()
+class StudentResource @Inject constructor(private val studentService: StudentService) {
 
     @GET
     @Path("")

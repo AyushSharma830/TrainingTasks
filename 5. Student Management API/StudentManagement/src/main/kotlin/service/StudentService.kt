@@ -8,13 +8,15 @@ import com.google.gson.GsonBuilder
 import constants.Constants
 import models.School
 import org.json.JSONObject
+import validationServices.StudentValidation
 import java.util.UUID
+import javax.inject.Inject
 
 
-class StudentService() {
-    private val studentRepository = StudentRepository()
-    private val schoolService = SchoolService()
-    private val validateStudents = validationServices.StudentValidation()
+class StudentService @Inject constructor(
+    private val studentRepository: StudentRepository,
+    private val schoolService: SchoolService,
+    private val validateStudents: StudentValidation) {
 
     fun deleteStudentsBySchoolId(schoolId : String){
         try{
