@@ -1,0 +1,3 @@
+[submodule "StudentManagementModels"]
+    path = StudentManagementModels
+    url = https://github.com/AyushSharma830/StudentManagementModels.git

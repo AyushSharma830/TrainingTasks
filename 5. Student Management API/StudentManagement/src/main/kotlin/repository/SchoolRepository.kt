@@ -11,7 +11,6 @@ import models.School
 import org.bson.Document
 import org.litote.kmongo.findOneById
 
-import setupConnection
 import javax.inject.Inject
 
 class SchoolRepository @Inject constructor(private val db : MongoDatabase) {

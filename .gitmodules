@@ -1,0 +1,18 @@
+[submodule "5. Student Management API/StudentManagement/src/main/kotlin/common/StudentManagementModels"]
+	path = 5. Student Management API/StudentManagement/src/main/kotlin/common/StudentManagementModels
+	url = git@github.com:AyushSharma830/StudentManagementModels.git
+[submodule "5. Student Management API/StudentManagement/common/StudentManagementModels"]
+	path = 5. Student Management API/StudentManagement/common/StudentManagementModels
+	url = git@github.com:AyushSharma830/StudentManagementModels.git
+[submodule "5. Student Management API/StudentManagement/models-common/StudentManagementModels"]
+	path = 5. Student Management API/StudentManagement/models-common/StudentManagementModels
+	url = git@github.com:AyushSharma830/StudentManagementModels.git
+[submodule "5. Student Management API/StudentManagement/StudentManagementModels"]
+	path = 5. Student Management API/StudentManagement/StudentManagementModels
+	url = git@github.com:AyushSharma830/StudentManagementModels.git
+[submodule "5. Student Management API/StudentManagement/model-common/StudentManagementModels"]
+	path = 5. Student Management API/StudentManagement/model-common/StudentManagementModels
+	url = git@github.com:AyushSharma830/StudentManagementModels.git
+[submodule "5. Student Management API/StudentManagement/Common/StudentManagementModels"]
+	path = 5. Student Management API/StudentManagement/Common/StudentManagementModels
+	url = git@github.com:AyushSharma830/StudentManagementModels.git
