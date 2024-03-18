@@ -1,0 +1,12 @@
+1. git submodule add <repo_url>
+2. In .gitmodules:
+    [submodule "StudentManagementModels"]
+       path = StudentManagementModels
+       url = https://github.com/AyushSharma830/StudentManagementModels.git
+3. git submodule init
+4. git submodule update
+5. In settings.gradle.kts:
+    include(":Common")
+    project(":Common").projectDir = file( "./Common/StudentManagementModels")
+6. In build.gradle.kts:
+    implementation(project(":Common"))
